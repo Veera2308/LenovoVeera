@@ -5,7 +5,8 @@ public with sharing class AccountController {
         return [SELECT Id, Name, Type, Rating,
                 Phone, Website, Email__c
                 FROM Account 
-                ORDER BY CreatedDate DESC];
+                ORDER BY];
+                
     }
  
     
