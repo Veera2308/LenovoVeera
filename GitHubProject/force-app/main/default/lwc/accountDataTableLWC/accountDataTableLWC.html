@@ -1,0 +1,87 @@
+<template>
+
+   <template if:true={isSpinner}>
+      <div class="spinner">
+          <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+      </div>
+  </template>
+
+
+
+   <lightning-card  variant="Narrow"  title="Account Datatable" >
+
+
+<!-- DISPLAYING CONTACTS FROM CHOOSED ACCOUNT AND SEARCH BAR -->
+
+      <div class="slds-grid">
+         <div class="slds-col" style = "padding-top: 20px; padding-left: 20px;">
+           <span><lightning-button variant   ="Brand" label="Display Contact" title="Display Contact" onclick={contactClick}></lightning-button>
+           </span>
+         </div>
+         <div class="slds-col" style="padding-right: 20px; padding-left: 150px;">
+           <span><lightning-input type="search" variant="standard" name="Search Account" label="Search Account" placeholder="type here..." onchange={searchChange}></lightning-input>
+           </span>
+         </div>
+         </div>
+
+<!-- DISPLAY RECORDS PER PAGE, TOTAL RECORDS AND USER SELECTED RECORDS -->
+
+         <div class="slds-grid slds-wrap slds-m-around_small">
+            <div class="slds-col slds-size_8-of-12">
+              <span>
+               <div class=”custom-dropdown”>
+                  <label class="slds-form-element__label"><b>Pages : </b>  </label>
+                  <select class=”dropdown-select” style ="width: 10%;" onchange={handleChange}>
+                      <template for:each={options} for:item="option">
+                          <option key={option.value} value={option.value}>{option.label}</option>
+                      </template>
+                  </select>
+              </div>
+              </span>
+            </div>
+            <div class="slds-col slds-size_5-of-12">
+              <span>  
+               <b> Total Records : </b>{totalRecords}
+         </span>
+            </div>
+            <div class="slds-col slds-size_5-of-12">
+              <span><b>Selected Records :  </b>{selectedRowCount}</span>
+            </div>
+          </div>
+
+
+<!-- DATA TABLE OF ACCOUNT -->
+
+   <lightning-button-icon  icon-name="utility:down" variant="border-filled" alternative-text="Show More" slot="actions"></lightning-button-icon>
+   <div class="slds-m-around_small">
+      <template if:true={filteredData}>
+      <lightning-datatable
+        key-field="id"
+        column-widths-mode=auto
+        columns={accountColumn}
+        data={filteredData}
+        default-sort-direction={defaultSortDirection}
+         draft-values={saveDraftValues}
+         onsave={handleSave}
+         
+        load-more-offset="20"
+        max-column-width="1000"
+        max-row-selection=""
+        min-column-width="50"
+        onsort={onHandleSort}
+        onrowselection={handleRowAction}
+        
+        resize-step="10"
+        row-number-offset="0"
+         
+        sorted-by={sortedBy}
+        sorted-direction={sortDirection}
+      ></lightning-datatable>
+   </template>
+
+   <template if:true={error}>
+      {error} error
+   </template>    
+   </div>
+   </lightning-card>
+   </template>
