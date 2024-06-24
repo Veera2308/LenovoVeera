@@ -1,0 +1,162 @@
+<aura:component controller="AllSobjects" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    
+    <div class="slds-page-header" style="background-color:red;" >
+        <h1 style="font-size: 300%;">
+            <img src="https://appexchange.salesforce.com/partners/servlet/servlet.FileDownload?file=00P3A00000hBMjQUAW" alt="Trulli" width="100" height="100"/>
+            Custom BitOrder Work Bench 
+        </h1>
+        
+    </div>
+    <aura:attribute name="options" type="List" />
+    <aura:attribute name="selectedValue" type="String" />
+    <aura:attribute name="listValues" type="List" default="[]"/>
+    <aura:attribute name="values" type="List" default="[]"/>
+    <aura:attribute name="userSelected" type="String" />
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="sort" type="List" default="[]"/>
+    <aura:attribute name="sortSelected" type="String" />
+    <aura:attribute name="ascDesc" type="List" default="[
+                                                        {'label': 'A to Z', 'value': 'ASC'},
+                                                        {'label': 'Z to A', 'value': 'DESC'}
+                                                        ]"/>
+    <aura:attribute name="selectedAscDes" type="String" default="ASC"/>
+    <aura:attribute name="nullsFirstLast" type="List" default="[
+                                                               {'label': 'Nulls First', 'value': 'NULLS FIRST'},
+                                                               {'label': 'Nulls Last', 'value': 'NULLS LAST'}
+                                                               ]"/>
+    <aura:attribute name="selectednullsFirstLast" type="String" default="NULLS FIRST"/>
+    
+    <aura:attribute name="limit" type="String"/>
+    <aura:attribute name="inputLimit" type="String" />
+    
+    <aura:attribute name="filter" type="List" default="[]"/>
+    <aura:attribute name="filterLimit" type="String" />
+
+    
+    <aura:attribute name="operator" type="List" default="[
+                                                         {'label': '=', 'value': '='},
+                                                         {'label': '≠', 'value': '≠'},
+                                                         {'label': '&lt;', 'value': '&lt;'},
+                                                         {'label': '&gt;', 'value': '&gt;'},
+                                                         {'label': '&le;', 'value': '&le;'},
+                                                         {'label': '&ge;', 'value': '&ge;'},
+                                                         {'label': 'starts with', 'value': 'starts with'},
+                                                         {'label': 'ends with', 'value': 'ends with'},
+                                                         {'label': 'contains', 'value': 'contains'},
+                                                         {'label': 'in', 'value': 'in'},
+                                                         {'label': 'not in', 'value': 'not in'},
+                                                         {'label': 'includes', 'value': 'includes'},
+                                                         {'label': 'excludes', 'value': 'excludes'}
+                                                         ]"/>
+        <aura:attribute name="operatorValue" type="String" />
+
+    
+    <aura:attribute name="condition" type="String"/>  
+        <aura:attribute name="inputFilterCondition" type="String" />
+
+    
+    <aura:attribute name="test" type="Boolean" default="true"/>
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    
+    <div class="slds-box slds-theme_default" style="background-color:Orange;">
+        &nbsp;
+        <div style="width:200px; ">
+            
+            <lightning:select name="Objects" label="Select object:" aura:id="onjId" onchange="{!c.onChange}" value="{!v.selectedValue}">
+                <option value=""> Select </option>
+                <aura:iteration items="{!v.options}" var="objectname">
+                    <option value="{!objectname}" text="{!objectname}" />  
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        &nbsp;
+        <div style=" display: flex; justify-content: left; ">
+            
+            
+            <div style="width:300px; "> 
+                <lightning:dualListbox name="multipleOptions"  
+                                       label= "Select Options" 
+                                       sourceLabel="Available" 
+                                       selectedLabel="Selected"
+                                       options="{!v.listValues}" 
+                                       value="{!v.values}"></lightning:dualListbox>
+                &nbsp;
+                <div>
+                    <lightning:button variant="brand" label="Generate query" title="Brand action" onclick="{!c.handleClick}" />
+                </div>
+            </div>
+            &nbsp;
+            
+            
+            
+            <div>
+                <div style="display: flex; justify-content: left;">
+                    <div style="width:300px;">
+                        <lightning:combobox name="Sort result by" label="Sort result by" aura:id="onSortId" value="{!v.sortSelected}" placeholder="Select an Option" options="{!v.listValues}" onchange="{!c.sortChange}" disabled="{!v.test}"/>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div style="width:200px;">
+                        <lightning:combobox name="Asc/Dsc" label="Asc/Dsc" aura:id="onArrangeId" value="{!v.selectedAscDes}" placeholder="Select Progress" options="{!v.ascDesc}" onchange="{!c.ascDescChange}" disabled="{!v.test}"/>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div style="width:200px;">
+                        <lightning:combobox name="Arrange Null" label="Arrange Null" aura:id="onNullId" value="{!v.selectednullsFirstLast}" placeholder="Select Null" options="{!v.nullsFirstLast}" onchange="{!c.nullChange}" disabled="{!v.test}"/>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div > 
+                        <lightning:input type="number" name="Limit" aura:id="onNumberId" value="{!v.inputLimit}" label="Limit" onchange="{!c.limitChange}" disabled="{!v.test}"/>
+                    </div>
+                </div>
+                
+                <br></br>
+                
+                <div style="display: flex; justify-content: left; ">
+                    <div style="width:300px;">
+                        <lightning:combobox name="Filter result by" label="Filter result by" aura:id="onFilterId"  value="{!v.filterLimit}" placeholder="Select an Option" options="{!v.listValues}" onchange="{!c.filterChange}"/>
+                        <div aura:id="comboBoxContainerFilter"></div>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div style="width:300px; ">
+                        <lightning:combobox name="Operator" label="Operator" aura:id="onOperatorId"  value="{!v.operatorValue}" options="{!v.operator}" onchange="{!c.operatorChange}" />
+                        <div aura:id="comboBoxContainerOperator"></div>
+                    </div >
+                    &nbsp;&nbsp;
+                    <div style="height: 50px"> 
+                        <lightning:input type="text" name="Condition" aura:id="onFilterTextId" value="{!v.inputFilterCondition}" label="Condition" onchange="{!c.inputChange}"/>
+                        <div aura:id="inputNumber"></div>
+                    </div>
+                    &nbsp;&nbsp;
+                    <br> </br> <br> </br>  
+                    <div style= "margin-top: 27px"> 
+                        <lightning:buttonIcon iconName="utility:add" variant="bare" onclick="{!c.utilityHandler}" alternativeText="add" title="add" />
+                    </div>
+                </div>
+                
+                <br></br><br></br> 
+                
+                
+                <div style="width:1000px; ">
+                    <lightning:textarea name="Query" label="Query" value="{!v.userSelected}"/>
+                    &nbsp;
+                    <div class="slds-align_absolute-center">
+                        <lightning:button variant="brand" label="Query" title="Brand action" onclick="{!c.queryClick}" />
+                    </div>
+                    
+                    &nbsp;
+                    <div style="height:200px">
+                        <lightning:datatable
+                                             keyField="id"
+                                             data="{!v.data}"
+                                             columns="{!v.columns}"
+                                             hideCheckboxColumn="true"/>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+</aura:component>

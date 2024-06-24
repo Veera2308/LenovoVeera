@@ -31,7 +31,7 @@
               <span>
                <div class=”custom-dropdown”>
                   <label class="slds-form-element__label"><b>Pages : </b>  </label>
-                  <select class=”dropdown-select” style ="width: 10%;" onchange={handleChange}>
+                  <select class=”dropdown-select” style ="width: 10%;" onchange={handleRecordsPerPage}>
                       <template for:each={options} for:item="option">
                           <option key={option.value} value={option.value}>{option.label}</option>
                       </template>
@@ -77,11 +77,89 @@
         sorted-by={sortedBy}
         sorted-direction={sortDirection}
       ></lightning-datatable>
+
+     
+      
    </template>
+   <div class="slds-grid slds-grid_align-end slds-p-around_large">
+    <div class="slds-col slds-p-right_xx-large" style="padding-right:135px; padding-top: 7px;font-size: 16px;">
+       <b>Page </b>  <strong>{pageNumber}</strong> <b> of </b> <strong>{totalPages}</strong>
+    </div>
+    <div class="slds-col slds-p-horizontal_x-small">
+      <span><lightning-button 
+        variant="brand"
+        label="First" 
+        title="First Page" 
+        value="" 
+        type="button"
+        onclick={firstPage} 
+        disabled={disableFirst}
+        stretch="false" 
+        icon-name="utility:arrow_left"
+        icon-position="center"
+        class="custom-div"
+      ></lightning-button></span>
+    </div>
+    <div class="slds-col slds-p-horizontal_x-small">
+      <span><lightning-button 
+        variant="brand"
+        label="Back" 
+        title="Back Page" 
+        value="" 
+        type="button"
+        onclick={previousPage}
+        disabled={disableFirst}
+        stretch="false" 
+        icon-name="utility:back"
+        icon-position="left"
+        class=""
+      ></lightning-button></span>
+    </div>
+    <div class="slds-col slds-p-horizontal_x-small">
+      <span><lightning-button 
+        variant="brand"
+        label="Next" 
+        title="Next Page" 
+        value="" 
+        type="button"
+        onclick={nextPage} 
+        disabled={disableLast}
+        stretch="false" 
+        icon-name="utility:forward"
+        icon-position="left"
+        class=""
+      ></lightning-button></span>
+    </div>
+    <div class="slds-col slds-p-horizontal_x-small">
+      <span><lightning-button 
+        variant="brand"
+        label="Final" 
+        title="Final Page" 
+        value="" 
+        type="button"
+        onclick={lastPage} 
+        stretch="false" 
+        disabled={disableLast}
+        icon-name="utility:arrow_right"
+        icon-position="left"
+        class=""
+      ></lightning-button></span>
+    </div>
+    </div>
+
 
    <template if:true={error}>
       {error} error
-   </template>    
+   </template> 
+   
+   
+    
+
+
+   
    </div>
+
+
+
    </lightning-card>
    </template>
