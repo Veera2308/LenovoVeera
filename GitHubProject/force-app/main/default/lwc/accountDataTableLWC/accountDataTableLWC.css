@@ -1,0 +1,12 @@
+.custom-div {
+    --slds-c-button-brand-color:	rgb(60, 255, 0);
+    --slds-c-button-brand-color-background-active: rgb(0, 26, 255);
+    --slds-c-button-brand-color-background-hover: rgb(255, 255, 255);
+   /*
+    --slds-c-button-brand-color-border:
+    --slds-c-button-brand-color-border-hover:
+    --slds-c-button-brand-text-color:
+    --slds-c-button-brand-text-color-active:
+    --slds-c-button-brand-text-color-hover:
+    */
+}
