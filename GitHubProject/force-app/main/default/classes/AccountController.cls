@@ -1,5 +1,9 @@
 public with sharing class AccountController {
     
+    public static void aa(){
+
+        system.debug('ggg');
+    }
     @AuraEnabled(cacheable=true)
     public static List<Account> getAccountList() {
         return [SELECT Id, Name, Type, Rating,
